@@ -1,34 +1,40 @@
 package hello.core;
 
 import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
 import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemberService;
 import hello.core.member.MemberServiceImpl;
 import hello.core.member.MemoryMemberRepository;
-import hello.core.order.Order;
 import hello.core.order.OrderService;
 import hello.core.order.OrderServiceImpl;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
 
+@Configurable
 public class AppConfig {
 
+    @Bean
     public MemberService memberService() {
         // return new MemberServiceImpl(new MemoryMemberRepository()); // 문제점: 역할에 따른 구현이 한눈에 드러나지
         return new MemberServiceImpl(memberRepository()); // c+a+M
         // 생성자 주입
     }
 
+    @Bean
     private static MemberRepository memberRepository() { // 반환형은 인터페이스
         return new MemoryMemberRepository();
     }
 
+    @Bean
     public OrderService orderService() {
         // return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
+    @Bean
     public DiscountPolicy discountPolicy() {
+        // return new FIxDiscountPolicy();
         return new RateDiscountPolicy();
     }
 
