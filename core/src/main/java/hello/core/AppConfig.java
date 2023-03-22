@@ -10,25 +10,29 @@ import hello.core.order.OrderService;
 import hello.core.order.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@Configurable
-public class AppConfig {
+@Configuration
+public class AppConfig  {
 
     @Bean
     public MemberService memberService() {
+        System.out.println("call AppConfig.memberService"); // soutm
         // return new MemberServiceImpl(new MemoryMemberRepository()); // 문제점: 역할에 따른 구현이 한눈에 드러나지
         return new MemberServiceImpl(memberRepository()); // c+a+M
         // 생성자 주입
     }
 
     @Bean
-    private static MemberRepository memberRepository() { // 반환형은 인터페이스
+    public MemberRepository memberRepository() { // 반환형은 인터페이스
+        System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public OrderService orderService() {
         // return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
+        System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
